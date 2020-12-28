@@ -1,0 +1,18 @@
+- name : Setting Up Webserver
+  hosts : localhost,ubu
+  vars_files :
+    - "version_files/{{ ansible_facts['distribution'] }}:{{ ansible_facts['distribution_version'] }}.yml"
+  tasks :
+  - debug  :
+      msg: "{{ ansible_facts['distribution'] }} package is  :  {{websrv_package_name}}"
+  - name : Install webserver software
+    package :
+      name : "{{websrv_package_name}}"
+      state : present
+  - service :
+      name : "{{websrv_package_name}}"
+      state : started
+  - name : Copy OS Webpage
+    copy :
+        src : "webpages/{{os_web_page}}"
+        dest : /var/www/html
